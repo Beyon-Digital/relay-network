@@ -1,26 +1,26 @@
 {
-  "dependencies": {
-    "react-relay-network-modern": "^6.2.2"
-  },
-  "name": "relay_network",
-  "version": "1.0.0",
-  "description": "relay Network package to build relay environment objects for Beyond Digital APIs ",
-  "main": "index.js",
-  "devDependencies": {
-    "@types/relay-runtime": "^14.1.23",
-    "typescript": "^5.4.2"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Beyon-Digital/relay-network.git"
-  },
-  "author": "sjainam74@gmail.com",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Beyon-Digital/relay-network/issues"
-  },
-  "homepage": "https://github.com/Beyon-Digital/relay-network#readme"
+	"dependencies": {
+		"react-relay-network-modern": "^6.2.2"
+	},
+	"name": "relay_network_bdt",
+	"version": "1.0.0",
+	"description": "relay Network package to build relay environment objects for Beyond Digital APIs ",
+	"main": "index.js",
+	"devDependencies": {
+		"@types/relay-runtime": "^14.1.23",
+		"typescript": "^5.4.2"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Beyon-Digital/relay-network.git"
+	},
+	"author": "sjainam74@gmail.com",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Beyon-Digital/relay-network/issues"
+	},
+	"homepage": "https://github.com/Beyon-Digital/relay-network#readme"
 }
