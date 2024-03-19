@@ -15,13 +15,13 @@ import {
 // constants
 export const dev = process.env.NODE_ENV === "development";
 
-export interface EnvBuilder {
+export interface MiddlewareBuilderProps {
   url: string;
   apiToken: string;
   token?: string;
 };
 
-export const middlewares = ({ url, apiToken, token }: EnvBuilder): Array<Middleware> => {
+export const middlewares = ({ url, apiToken, token }: MiddlewareBuilderProps): Array<Middleware> => {
   return (
     [
       cacheMiddleware({
