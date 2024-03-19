@@ -1,10 +1,10 @@
 import { Environment, RecordSource, Store } from 'relay-runtime';
 import { RelayNetworkLayer } from 'react-relay-network-modern';
-import { EnvBuilder, middlewares } from './middleware';
+import { MiddlewareBuilderProps, middlewares } from './middleware';
 
 const source = new RecordSource();
 const store = new Store(source);
-const prodEnv = (props: EnvBuilder): Environment => new Environment({
+const prodEnv = (props: MiddlewareBuilderProps): Environment => new Environment({
     network: new RelayNetworkLayer(middlewares(props), {}),
     store
 });

@@ -9,7 +9,8 @@ import {
   RelayRequestAny,
   errorMiddleware,
   loggerMiddleware,
-  perfMiddleware
+  perfMiddleware,
+  MiddlewareNextFn
 } from 'react-relay-network-modern';
 
 // constants
@@ -76,7 +77,7 @@ export const middlewares = ({ url, apiToken, token }: MiddlewareBuilderProps): A
           errorMiddleware(),
           loggerMiddleware(),
           perfMiddleware(),
-          (next) => async (req) => {
+          (next: MiddlewareNextFn) => async (req: any) => {
             const res = await next(req);
             console.log(res.json);
             return res;

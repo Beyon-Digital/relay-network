@@ -7,6 +7,7 @@
   "description": "relay Network package to build relay environment objects for Beyond Digital APIs ",
   "main": "index.js",
   "devDependencies": {
+    "@types/relay-runtime": "^14.1.23",
     "typescript": "^5.4.2"
   },
   "scripts": {
