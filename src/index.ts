@@ -1,2 +1,2 @@
-import { middlewares, MiddlewareBuilderProps } from "./middleware";
-import EnvironmentBuilder from './productionEnv';
+export { middlewares, MiddlewareBuilderProps } from "./middleware";
+export { default as EnvironmentBuilder } from './productionEnv';

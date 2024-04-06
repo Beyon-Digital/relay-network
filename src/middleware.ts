@@ -10,7 +10,7 @@ import {
   errorMiddleware,
   loggerMiddleware,
   perfMiddleware,
-  MiddlewareNextFn
+  RelayNetworkLayerOpts,
 } from 'react-relay-network-modern';
 
 // constants
@@ -20,9 +20,12 @@ export interface MiddlewareBuilderProps {
   url: string;
   apiToken: string;
   token?: string;
+  extraHeaders?: Record<string, string>;
+  extraMiddleware?: Middleware[];
+  networkOpts?: RelayNetworkLayerOpts;
 };
 
-export const middlewares = ({ url, apiToken, token }: MiddlewareBuilderProps): Array<Middleware> => {
+export const middlewares = ({ url, apiToken, token, extraHeaders, extraMiddleware }: MiddlewareBuilderProps): Array<Middleware> => {
   return (
     [
       cacheMiddleware({
@@ -44,6 +47,7 @@ export const middlewares = ({ url, apiToken, token }: MiddlewareBuilderProps): A
           "Access-Control-Allow-Headers": "API, Content-Type, Dnt, Origin, User-Agent, csrftoken, X-CSRFToken, Access-Control-Allow-Origin, AUTHORIZATION",
           'X-CSRFToken': req.fetchOpts.headers["X-CSRFToken"] ?? "",
           'csrftoken': req.fetchOpts.headers["csrftoken"] ?? "",
+          ...extraHeaders
         }),
         'cache': 'reload',
         'redirect': 'follow'
@@ -67,8 +71,10 @@ export const middlewares = ({ url, apiToken, token }: MiddlewareBuilderProps): A
       progressMiddleware({
         onProgress: (current, total) => {
           console.log('Downloaded: ' + current + ' B, total: ' + total + ' B');
-          const px = new CustomEvent("progress", { detail: { progress: current / (total ?? 100) } });
-          window.dispatchEvent(px);
+          if (window && window.dispatchEvent) {
+            const px = new CustomEvent("progress", { detail: { progress: current / (total ?? 100) } });
+            window.dispatchEvent(px);
+          }
         },
       }),
       uploadMiddleware(),
@@ -76,14 +82,10 @@ export const middlewares = ({ url, apiToken, token }: MiddlewareBuilderProps): A
         dev ? [
           errorMiddleware(),
           loggerMiddleware(),
-          perfMiddleware(),
-          (next: MiddlewareNextFn) => async (req: any) => {
-            const res = await next(req);
-            console.log(res.json);
-            return res;
-          },
+          perfMiddleware()
         ] : []
       ),
+      ...(extraMiddleware ?? [])
     ]
   )
 };
