@@ -3,7 +3,7 @@
 		"react-relay-network-modern": "^6.2.2"
 	},
 	"name": "relay_network_bdt",
-	"version": "1.0.01",
+	"version": "1.0.2",
 	"description": "relay Network package to build relay environment objects for Beyond Digital APIs ",
 	"main": "index.js",
 	"devDependencies": {
@@ -11,7 +11,10 @@
 		"typescript": "^5.4.2"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc",
+		"prepublish": "npm run build",
+		"publish": "npm publish"
 	},
 	"repository": {
 		"type": "git",
