@@ -1,9 +1,6 @@
-# README.md
-
-```markdown
 # relay-network
 
-`relay-network` is a package to build Relay environment objects for Beyond Digital APIs. It provides a set of middlewares and utilities to facilitate network operations in Relay.
+`relay-network` is a TypeScript package designed to build Relay environment objects for Beyond Digital APIs. It provides a set of middlewares and utilities to facilitate network operations in Relay.
 
 ## Table of Contents
 
@@ -100,6 +97,12 @@ To build the project, run:
 
 ```sh
 npm run build
+```
+
+To run tests, use:
+
+```sh
+npm test
 ```
 
 ## License
