@@ -22,17 +22,42 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.middlewares = exports.dev = void 0;
 var react_relay_network_modern_1 = require("react-relay-network-modern");
+var progressMiddleware_1 = require("./progressMiddleware");
 // constants
 exports.dev = process.env.NODE_ENV === "development";
 ;
+/**
+ * Function to build an array of middlewares for Relay Network Layer
+ *
+ * @param {MiddlewareBuilderProps} props - The properties for building the middleware.
+ * @returns {Array<Middleware>} - An array of middlewares.
+ */
 var middlewares = function (_a) {
     var url = _a.url, apiToken = _a.apiToken, token = _a.token, extraHeaders = _a.extraHeaders, extraMiddleware = _a.extraMiddleware;
-    return (__spreadArray(__spreadArray([
+    var commonHeaders = {
+        "Access-Control-Allow-Origin": "true",
+        "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
+        "Access-Control-Allow-Credentials": "true",
+        "CLIENT-ID": apiToken,
+        "Access-Control-Allow-Headers": "API, Content-Type, Dnt, Origin, User-Agent, csrftoken, X-CSRFToken, Access-Control-Allow-Origin, AUTHORIZATION",
+    };
+    var devMiddlewares = exports.dev ? [
+        (0, react_relay_network_modern_1.errorMiddleware)({
+            "prefix": "[Relay Network] Error - ",
+        }),
+        (0, react_relay_network_modern_1.loggerMiddleware)({
+            "logger": function (event) { return console.log("Relay Request: ", event); }
+        }),
+        (0, react_relay_network_modern_1.perfMiddleware)({
+            "logger": function (event) { return console.log("Perf: ", event); }
+        })
+    ] : [];
+    return __spreadArray(__spreadArray([
         (0, react_relay_network_modern_1.cacheMiddleware)({
             size: 100, // max 100 requests
-            'ttl': 900000, // 250 minutes
-            'allowMutations': true,
-            'allowFormData': true,
+            "ttl": 900000, // 250 minutes
+            "allowMutations": true,
+            "allowFormData": true,
         }),
         (0, react_relay_network_modern_1.urlMiddleware)({
             url: function () { return Promise.resolve(url); },
@@ -41,10 +66,10 @@ var middlewares = function (_a) {
             credentials: "include",
             headers: function (req) {
                 var _a, _b;
-                return (__assign({ "Access-Control-Allow-Origin": "true", "Access-Control-Allow-Methods": "POST, OPTIONS, GET", "Access-Control-Allow-Credentials": "true", "CLIENT-ID": apiToken, "Access-Control-Allow-Headers": "API, Content-Type, Dnt, Origin, User-Agent, csrftoken, X-CSRFToken, Access-Control-Allow-Origin, AUTHORIZATION", 'X-CSRFToken': (_a = req.fetchOpts.headers["X-CSRFToken"]) !== null && _a !== void 0 ? _a : "", 'csrftoken': (_b = req.fetchOpts.headers["csrftoken"]) !== null && _b !== void 0 ? _b : "" }, extraHeaders));
+                return (__assign(__assign(__assign({}, commonHeaders), { "X-CSRFToken": (_a = req.fetchOpts.headers["X-CSRFToken"]) !== null && _a !== void 0 ? _a : "", "csrftoken": (_b = req.fetchOpts.headers["csrftoken"]) !== null && _b !== void 0 ? _b : "" }), extraHeaders));
             },
-            'cache': 'reload',
-            'redirect': 'follow'
+            "cache": "reload",
+            "redirect": "follow",
         }),
         (0, react_relay_network_modern_1.authMiddleware)({
             token: token,
@@ -59,25 +84,18 @@ var middlewares = function (_a) {
                 var forceRetry = _a.forceRetry, abort = _a.abort, delay = _a.delay, attempt = _a.attempt, lastError = _a.lastError, req = _a.req;
                 if (attempt > 10)
                     abort();
-                console.log('call `forceRelayRetry()` for immediately retry! Or wait ' + delay + ' ms.');
+                console.log("call `forceRelayRetry()` for immediately retry! Or wait " + delay + " ms.");
             },
             statusCodes: [500, 503, 504],
-            'logger': function (event) { return console.log('Retry: ', event); }
+            "logger": function (event) { return console.log("Retry: ", event); }
         }),
-        (0, react_relay_network_modern_1.progressMiddleware)({
+        (0, progressMiddleware_1.progressMiddleware)({
             onProgress: function (current, total) {
-                console.log('Downloaded: ' + current + ' B, total: ' + total + ' B');
-                if (window && window.dispatchEvent) {
-                    var px = new CustomEvent("progress", { detail: { progress: current / (total !== null && total !== void 0 ? total : 100) } });
-                    window.dispatchEvent(px);
-                }
+                console.log("Downloaded: " + current + " B, total: " + total + " B");
             },
+            "sizeHeader": "X-Transfer-Size"
         }),
         (0, react_relay_network_modern_1.uploadMiddleware)()
-    ], (exports.dev ? [
-        (0, react_relay_network_modern_1.errorMiddleware)(),
-        (0, react_relay_network_modern_1.loggerMiddleware)(),
-        (0, react_relay_network_modern_1.perfMiddleware)()
-    ] : []), true), (extraMiddleware !== null && extraMiddleware !== void 0 ? extraMiddleware : []), true));
+    ], devMiddlewares, true), (extraMiddleware !== null && extraMiddleware !== void 0 ? extraMiddleware : []), true);
 };
 exports.middlewares = middlewares;

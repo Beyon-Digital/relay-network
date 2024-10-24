@@ -4,10 +4,14 @@ import { MiddlewareBuilderProps, middlewares } from './middleware';
 
 const source = new RecordSource();
 const store = new Store(source);
-const EnvironmentBuilder = ({ networkOpts, ...props }: MiddlewareBuilderProps): Environment => new Environment({
-    network: new RelayNetworkLayer(middlewares(props), networkOpts),
-    store
-});
+const EnvironmentBuilder = (
+    { networkOpts, ...props }: MiddlewareBuilderProps
+): Environment => new Environment(
+    {
+        network: new RelayNetworkLayer(middlewares(props), networkOpts),
+        store
+    }
+);
 
 
 export default EnvironmentBuilder;
