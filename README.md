@@ -18,7 +18,7 @@
 To install the package, use npm:
 
 ```sh
-npm install relay-network
+npm install relay_network_bdt
 ```
 
 ## Usage
